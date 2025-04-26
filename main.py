@@ -70,21 +70,24 @@ fire = Action(
     button = Button(WIDTH / 2 + 20, HEIGHT - actionBoxHeight + 55,
                   "images/fire_btn.png", "images/fire_btn_hover.png",
                   getActionState = 3),
-    attackType = fire_attack,
+    attackType = "fire",
+    statusEffect = "burning"
 )
 
 blizzard = Action(
     button = Button(WIDTH / 2 + 20, fire.button.rect.y + 95,
                   "images/blizzard_btn.png", "images/blizzard_btn_hover.png",
                   getActionState = 3),
-    attackType = blizzard_attack,
+    attackType = "blizzard",
+    statusEffect = "frozen"
 )
 
 thunder = Action(
     button = Button(WIDTH / 2 + 20, fire.button.rect.y + 200,
                   "images/thunder_btn.png", "images/thunder_btn_hover.png",
                   getActionState = 3),
-    attackType = thunder_attack,
+    attackType = "thunder",
+    statusEffect = "stunned"
 )
 
 potion = Action(
@@ -159,7 +162,7 @@ brawler = Role(
     baseMStrength = 2, 
     baseSpeed = 5, 
     enemyAtks = ["light", "medium", "heavy"],
-    enemyMAtks = [fire_attack]
+    enemyMAtks = ["fire"]
 )
 
 knight = Role(
@@ -181,7 +184,7 @@ mage = Role(
     baseMStrength = 5,
     baseSpeed = 3,
     enemyAtks = ["medium", "heavy"], 
-    enemyMAtks = [fire_attack, "blizzard", "thunder"]
+    enemyMAtks = ["fire", "blizzard", "thunder"]
 )
 
 rogue = Role(
@@ -203,7 +206,7 @@ warrior = Role(
     baseMStrength = 2,
     baseSpeed = 3,
     enemyAtks = ["light", "medium", "heavy"],
-    enemyMAtks = [fire_attack]
+    enemyMAtks = ["fire"]
 )
 
 allRoles = [brawler, knight, mage, rogue, warrior]
@@ -486,11 +489,11 @@ def main():
                 print(attacks)
                 print("enemy attack:", attackType)
                 # make dictionary
-                if attackType.statusEffect:
-                    print("yer")
-                    tempEnemy.applyStatus(attackType.statusEffect, tempPlayer)
-                    print("player status effect:", tempPlayer.statusEffect)
-                    tempEnemy.mp -= 10
+                # if attackType.statusEffect:
+                #     print("yer")
+                    # tempEnemy.applyStatus(attackType.statusEffect, tempPlayer)
+                    # print("player status effect:", tempPlayer.statusEffect)
+                    # tempEnemy.mp -= 10
                 
                 currentActor = 1
                 actionTimer = 0
