@@ -170,23 +170,6 @@ warrior = Role(
 
 allRoles = [brawler, knight, mage, rogue, warrior]
 
-class StatusBar():
-    def __init__(self, currentAmnt, maxAmnt, xPos, yPos, width, height, mainCol, bgCol):
-        self.currentAmnt = currentAmnt
-        self.maxAmnt = maxAmnt
-        self.xPos = xPos
-        self.yPos = yPos
-        self.width = width
-        self.height = height
-        self.mainCol = mainCol
-        self.bgCol = bgCol
-
-    def draw(self, currentAmnt):
-        self.currentAmnt = currentAmnt
-        updatedAmnt = self.currentAmnt / self.maxAmnt
-        pygame.draw.rect(screen, self.bgCol, (self.xPos, self.yPos, self.width, self.height))
-        pygame.draw.rect(screen, self.mainCol, (self.xPos, self.yPos, self.width * updatedAmnt, self.height))
-
 def drawTxt(text, textColour, font, xPos, yPos):
     txt = font.render(text, False, textColour)
     screen.blit(txt, (xPos, yPos))
