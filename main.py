@@ -1,9 +1,10 @@
 import pygame
-from Button import Button
-from Role import Role
-from Actor import Actor
-from StatusBar import StatusBar
-from random import randint
+from button import Button
+from role import Role
+from player import Player
+from enemy import Enemy
+from statusBar import StatusBar
+import random
 
 pygame.init()
 
@@ -47,68 +48,42 @@ thunder_attack = {
     "mpCost" : 10
 }
 
-attackButton = {
-    "button" : Button(24, HEIGHT - actionBoxHeight + 20, 
+attackButton =  Button(24, HEIGHT - actionBoxHeight + 20, 
                   "images/attack_btn.png")
-}
 
-magicButton = {
-    "button" : Button(24, attackButton["button"].rect.y + 110, 
+magicButton = Button(24, attackButton.rect.y + 110, 
                   "images/magic_btn.png")               
-}
 
-itemButton = {
-    "button" : Button(24, attackButton["button"].rect.y + 220, 
+itemButton = Button(24, attackButton.rect.y + 220, 
                   "images/item_btn.png")
-}
 
-potionButton = {
-    "button" : Button(WIDTH / 2 + 20, HEIGHT - actionBoxHeight + 55,
+potionButton = Button(WIDTH / 2 + 20, HEIGHT - actionBoxHeight + 55,
                   "images/potion_btn.png", "images/potion_btn_hover.png",
                   getActionState = 4)
-}
 
-lightAtkButton = {
-    "button" : Button(WIDTH / 2 + 20, HEIGHT - actionBoxHeight + 55,
-                  "images/LAttack_btn.png", "images/LAttack_btn_hover.png",
-                  getActionState = 2),
-    "attackType" : light_attack
-}
+lightAtkButton = Button(WIDTH / 2 + 20, HEIGHT - actionBoxHeight + 55,
+                  "images/LAttack_btn.png", "images/LAttack_btn_hover.png", 
+                  light_attack, getActionState = 2)
+  
+mediumAtkButton = Button(WIDTH / 2 + 20, lightAtkButton.rect.y + 95, 
+                  "images/MAttack_btn.png",  "images/MAttack_btn_hover.png", 
+                  medium_attack, getActionState = 2)
 
-mediumAtkButton = {
-    "button" : Button(WIDTH / 2 + 20, lightAtkButton["button"].rect.y + 95, 
-                  "images/MAttack_btn.png",  "images/MAttack_btn_hover.png",
-                  getActionState = 2),
-    "attackType" : medium_attack
-}
+heavyAtkButton = Button(WIDTH / 2 + 20, lightAtkButton.rect.y + 200,
+                  "images/HAttack_btn.png", "images/HAttack_btn_hover.png", 
+                  heavy_attack, getActionState = 2)
+ 
+fireAtkButton = Button(WIDTH / 2 + 20, HEIGHT - actionBoxHeight + 55,
+                  "images/fire_btn.png", "images/fire_btn_hover.png", 
+                  fire_attack, getActionState = 3)
 
-heavyAtkButton = {
-    "button" : Button(WIDTH / 2 + 20, lightAtkButton["button"].rect.y + 200,
-                  "images/HAttack_btn.png", "images/HAttack_btn_hover.png",
-                  getActionState = 2),
-    "attackType" : heavy_attack
-}
+blizzardAtkButton = Button(WIDTH / 2 + 20, fireAtkButton.rect.y + 95,
+                  "images/blizzard_btn.png", "images/blizzard_btn_hover.png", 
+                  blizzard_attack, getActionState = 3)
 
-fireAtkButton = {
-    "button" : Button(WIDTH / 2 + 20, HEIGHT - actionBoxHeight + 55,
-                  "images/fire_btn.png", "images/fire_btn_hover.png",
-                  getActionState = 3),
-    "attackType" : fire_attack
-}
-    
-blizzardAtkButton = {
-    "button" : Button(WIDTH / 2 + 20, fireAtkButton["button"].rect.y + 95,
-                  "images/blizzard_btn.png", "images/blizzard_btn_hover.png",
-                  getActionState = 3),
-    "attackType" : blizzard_attack
-}
-
-thunderAtkButton = {
-    "button" : Button(WIDTH / 2 + 20, fireAtkButton["button"].rect.y + 200,
-                  "images/thunder_btn.png", "images/thunder_btn_hover.png",
-                  getActionState = 3),
-    "attackType" : thunder_attack
-}
+thunderAtkButton = Button(WIDTH / 2 + 20, fireAtkButton.rect.y + 200,
+                  "images/thunder_btn.png", "images/thunder_btn_hover.png", 
+                  thunder_attack, getActionState = 3)
 
 clock = pygame.time.Clock()
 fps = 60
@@ -120,8 +95,8 @@ brawler = Role(
     baseStrength = 5,
     baseMStrength = 2, 
     baseSpeed = 5, 
-    enemyAtks = ["light", "medium", "heavy"],
-    enemyMAtks = [fire_attack]
+    physicalAtks = [light_attack, medium_attack, heavy_attack],
+    magicAtks = [fire_attack]
 )
 
 knight = Role(
@@ -131,8 +106,8 @@ knight = Role(
     baseStrength = 3,
     baseMStrength = 3,
     baseSpeed = 2,
-    enemyAtks = ["light", "medium", "heavy"],
-    enemyMAtks = [blizzard_attack, thunder_attack]
+    physicalAtks = [light_attack, medium_attack, heavy_attack],
+    magicAtks = [blizzard_attack, thunder_attack]
 )
 
 mage = Role(
@@ -142,8 +117,8 @@ mage = Role(
     baseStrength = 2,
     baseMStrength = 5,
     baseSpeed = 3,
-    enemyAtks = ["medium", "heavy"], 
-    enemyMAtks = [fire_attack, blizzard_attack, thunder_attack]
+    physicalAtks = [light_attack, medium_attack, heavy_attack], 
+    magicAtks = [fire_attack, blizzard_attack, thunder_attack]
 )
 
 rogue = Role(
@@ -153,8 +128,8 @@ rogue = Role(
     baseStrength = 4,
     baseMStrength = 2,
     baseSpeed = 7,
-    enemyAtks = ["light", "medium", "heavy"],
-    enemyMAtks = [thunder_attack]
+    physicalAtks = [light_attack, medium_attack, heavy_attack],
+    magicAtks = [thunder_attack]
 )
 
 warrior = Role(
@@ -164,8 +139,8 @@ warrior = Role(
     baseStrength = 5,
     baseMStrength = 2,
     baseSpeed = 3,
-    enemyAtks = ["light", "medium", "heavy"],
-    enemyMAtks = [fire_attack]
+    physicalAtks = [light_attack, medium_attack, heavy_attack],
+    magicAtks = [fire_attack]
 )
 
 allRoles = [brawler, knight, mage, rogue, warrior]
@@ -176,7 +151,7 @@ def drawTxt(text, textColour, font, xPos, yPos):
 
 def displayOptions(optionButtons):
     for option in optionButtons:
-        option["button"].draw(screen)
+        option.draw(screen)
 
 def drawActionBox():
     pygame.draw.rect(screen, (0), (0, HEIGHT - actionBoxHeight, WIDTH, 350), 4) 
@@ -193,18 +168,16 @@ def yay():
 def main():
     running = True
     
-    tempPlayer = Actor(
+    tempPlayer = Player(
         xPos = 200, 
         yPos = 150, 
         colour = (0, 255, 0), 
-        role = brawler
-    )
-    
-    tempEnemy = Actor(
+        role = brawler)
+    tempEnemy = Enemy(
         xPos = 900, 
         yPos = 150, 
         colour = (255, 0, 0), 
-        role = allRoles[randint(0, len(allRoles) - 1)]
+        role = random.choice(allRoles)
     )
 
     playerHealth = StatusBar(currentAmnt = tempPlayer.hp,
@@ -251,25 +224,22 @@ def main():
     eStatusTxt = ""
      
     state = 0
-    actionTimer = 0
-    actionWait = 90
-    potionHeal = 20
 
-    if tempPlayer.speed <= tempEnemy.speed:
+    if tempPlayer.speed < tempEnemy.speed:
         currentActor = 2
+        state = 5
     else:
         currentActor = 1
 
     turn = 1
-    abilityCooldown = 0
-    # statusCooldown = 3 
-
     gameOver = False
     win = False
     
-    physicalAttacks = [lightAtkButton, mediumAtkButton, heavyAtkButton] 
-    magicAttacks = [fireAtkButton, blizzardAtkButton, thunderAtkButton]
-    potions = [potionButton]
+    # when player chooses role append all attacks that are available to them
+    # these will be empty
+    physicalAtkButtons = [lightAtkButton, mediumAtkButton, heavyAtkButton] 
+    magicAtksButtons = [fireAtkButton, blizzardAtkButton, thunderAtkButton]
+    potionButtons = [potionButton]
 
     while running:
         clock.tick(fps)
@@ -282,20 +252,70 @@ def main():
         # fill screen with background colour
         screen.fill(BGCOLOUR)  
 
+        # change state depending on what button is pressed
+        if attackButton.pressed(state):
+            state = 2
+        elif magicButton.pressed(state):
+            state = 3
+        elif itemButton.pressed(state):
+            state = 4
+
         # set text for each game state and display relevant options
         if state == 0:
             infoTxt = "what will you do next..."
         elif state == 2:
             infoTxt = "select an attack"
-            displayOptions(physicalAttacks)
+            displayOptions(physicalAtkButtons)
+            turnEnd = tempPlayer.normalAttack(currentActor=currentActor, currentState=state, 
+                                              target=tempEnemy, physicalAttacks=physicalAtkButtons)
+            if turnEnd:
+                state = 5
+                currentActor = 2
+                turn += 1
+                tempPlayer.updateStatus()
         elif state == 3:
             infoTxt = "select a spell"
-            displayOptions(magicAttacks)
+            displayOptions(magicAtksButtons)
+            turnEnd = tempPlayer.magicAttack(currentActor=currentActor, currentState=state, 
+                                             target=tempEnemy, magicAttacks=magicAtksButtons)
+            if turnEnd:
+                state = 5
+                currentActor = 2
+                turn += 1
+                tempPlayer.updateStatus()
         elif state == 4:
             infoTxt = "select a potion"
-            displayOptions(potions)
+            displayOptions(potionButtons)
+            turnEnd = tempPlayer.usePotions(currentActor=currentActor, currentState=state, 
+                                            currentPotions=potionButtons)
+            if turnEnd:
+                state = 5
+                currentActor = 2
+                turn += 1
+                tempPlayer.updateStatus()
         elif state == 5:
             infoTxt = "the enemy is attacking!"
+            enmyTurnEnd = tempEnemy.attack(currentActor=currentActor, target=tempPlayer)
+            if enmyTurnEnd:
+                state = 0
+                currentActor = 1
+                turn += 1
+                tempEnemy.updateStatus()
+                
+        if tempPlayer.abilityCooldown > 0:
+            warningTxt = "heavy attack on cooldown..."
+        else:
+            warningTxt = "heavy attack ready!"
+
+        if tempPlayer.statusEffect != None:
+            pStatusTxt = tempPlayer.statusEffect
+        else:
+            pStatusTxt = ""
+
+        if tempEnemy.statusEffect != None:
+            eStatusTxt = tempEnemy.statusEffect
+        else:
+            eStatusTxt = ""
 
         # draw action box
         drawActionBox()
@@ -334,19 +354,19 @@ def main():
         drawTxt(text = pStatusTxt, 
                 textColour = (255, 0, 0), 
                 font = FONT, 
-                xPos = 24, 
-                yPos = 50)
+                xPos = playerHealth.xPos + 225, 
+                yPos = playerHealth.yPos - 30)
         
         drawTxt(text = eStatusTxt, 
                 textColour = (255, 0, 0), 
                 font = FONT, 
-                xPos = 980, 
-                yPos = 50)
+                xPos = enemyHealth.xPos, 
+                yPos = enemyHealth.yPos - 30)
 
         # draw buttons
-        attackButton["button"].draw(screen)
-        magicButton["button"].draw(screen)
-        itemButton["button"].draw(screen)
+        attackButton.draw(screen)
+        magicButton.draw(screen)
+        itemButton.draw(screen)
 
         # draw actors  
         tempPlayer.draw(screen)
@@ -357,90 +377,6 @@ def main():
         enemyHealth.draw(tempEnemy.hp, screen)
         playerMP.draw(tempPlayer.mp, screen)
         enemyMP.draw(tempEnemy.mp, screen)
-
-        # change state depending on what button is pressed
-        if attackButton["button"].getAction(state):
-            state = 2
-        elif magicButton["button"].getAction(state):
-            state = 3
-        elif itemButton["button"].getAction(state):
-            state = 4
-        
-        # player attack
-        if tempPlayer.aliveStatus and currentActor == 1:
-            # start timer
-            actionTimer += 1
-            if actionTimer >= actionWait:
-                for option in physicalAttacks + magicAttacks:
-                    tempVar = option["attackType"]
-                    # print(tempVar["statusEffect"])
-                    if option["button"].getAction(state):
-                        print("yippie")
-                        if tempVar["name"] == "heavy" and abilityCooldown > 0:
-                            print("yay")
-                            break
-                        elif tempVar["name"] == "heavy":
-                            abilityCooldown = 5
-                            warningTxt = "Heavy attack on cooldown..."
-                        tempPlayer.attack(tempVar["name"], tempEnemy)
-
-                        if tempVar["statusEffect"] != "none":
-                            print("magic")
-                            tempPlayer.applyStatus(tempVar["statusEffect"], tempEnemy)
-                            print("Enemy status effect:", tempEnemy.statusEffect)
-                            tempPlayer.mp -= tempVar["mpCost"]
-
-        #                 state = 0
-        #                 currentActor = 2
-        #                 actionTimer = 0
-        #                 turn += 1
-        #                 if abilityCooldown > 0:
-        #                     abilityCooldown -= 1
-                               
-        #                 if abilityCooldown == 0:
-        #                     warningTxt = "Heavy attack ready!"
-                            
-        #                 break
-        #         else: # if no break
-        #             if potion.button.getAction(state) and tempPlayer.potions > 0:
-        #                 if tempPlayer.hp + potionHeal < tempPlayer.maxHP:
-        #                     healAmnt = potionHeal
-        #                 else:
-        #                     healAmnt = tempPlayer.maxHP - tempPlayer.hp
-
-        #                 print("Heal amt:", healAmnt)
-        #                 print("Player HP:", tempPlayer.hp)
-
-        #                 tempPlayer.hp += healAmnt
-        #                 tempPlayer.potions -= 1
-        #                 state = 0
-        #                 currentActor = 2
-        #                 actionTimer = 0
-        #                 turn += 1
-
-        # enemy attack
-        # if tempEnemy.aliveStatus and currentActor == 2:
-        #     state = 5
-        #     actionTimer += 1
-        #     if actionTimer >= actionWait:
-        #         attacks = tempEnemy.role.enemyAtks + tempEnemy.role.enemyMAtks
-        #         attackType = attacks[randint(0, len(attacks) - 1)]
-        #         tempEnemy.attack(attackType, tempPlayer)
-
-        #         print(attacks)
-        #         print("enemy attack:", attackType)
-        #         # make dictionary
-        #         # if attackType.statusEffect:
-        #         #     print("yer")
-        #         #     tempEnemy.applyStatus(attackType.statusEffect, tempPlayer)
-        #         #     print("player status effect:", tempPlayer.statusEffect)
-        #         #     tempEnemy.mp -= 10
-                
-        #         currentActor = 1
-        #         actionTimer = 0
-        #         state = 0
-
-                # no way to differenciate between magic and normal attacks
 
         if gameOver:
             die()

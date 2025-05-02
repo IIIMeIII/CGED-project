@@ -1,33 +1,34 @@
 import pygame
 
-class StatusBar():
+class StatusBar:
     """
     This class creates a rectangle that is used to display 
-    the player and enemy's stats (e.g health and mana)
+    the player and enemy's stats (e.g health and mana). This rectangle
+    reflects the current amount of these stats in real time
 
     Attributes:
-        currentAmnt (int)
-        maxAmnt (int)
-        xPos (int)
-        yPos (int)
-        width (int)
-        height (int)
-        mainCol (tuple)
-        bgCol (tuple)
+        currentAmnt (int): current value of variable being represented
+            maxAmnt (int): max value of variable being represented
+            xPos (int): x position of the status bar
+            yPos (int): y position of the status bar
+            width (int): width of the status bar
+            height (int): height of the status bar
+            mainCol (tuple): main colour of the status bar
+            bgCol (tuple): colour that appears under the status bar as it updates
     """
     def __init__(self, currentAmnt, maxAmnt, xPos, yPos, width, height, mainCol, bgCol):
         """
         StatusBar class constructor
 
-        params:
-            currentAmnt (int)
-            maxAmnt (int)
-            xPos (int)
-            yPos (int)
-            width (int)
-            height (int)
-            mainCol (tuple)
-            bgCol (tuple)
+        Parameters:
+            currentAmnt (int): current value of variable being represented
+            maxAmnt (int): max value of variable being represented
+            xPos (int): x position of the status bar
+            yPos (int): y position of the status bar
+            width (int): width of the status bar
+            height (int): height of the status bar
+            mainCol (tuple): main colour of the status bar
+            bgCol (tuple): colour that appears under the status bar as it updates
         """
         self.currentAmnt = currentAmnt
         self.maxAmnt = maxAmnt
@@ -43,8 +44,8 @@ class StatusBar():
         Function that displays the status bar on the window at the passed in 
         x and y coordinates. 
 
-        Params:
-            currentAmnt (int): 
+        Parameters:
+            currentAmnt (int): current value of status bar
             surface (window): initialised display window
         """
         self.currentAmnt = currentAmnt

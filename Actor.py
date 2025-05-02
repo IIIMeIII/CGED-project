@@ -1,6 +1,6 @@
 import pygame
 
-class Actor():
+class Actor:
     def __init__(self, xPos, yPos, colour, role):
         self.xPos = xPos
         self.yPos = yPos
@@ -18,7 +18,12 @@ class Actor():
         self.speed = role.baseSpeed
 
         self.potions = 3
-
+        self.potionHeal = 20
+        
+        self.abilityCooldown = 0
+        self.statusEffectCooldown = 0
+        self.actionTimer = 0
+        self.actionWait = 60
         self.aliveStatus = True # alive status
         self.statusEffect = None
         self.resistant = False
@@ -26,25 +31,25 @@ class Actor():
     def draw(self, screen):
         pygame.draw.rect(screen, (self.colour), (self.xPos, self.yPos, 100, 400))  
 
-    def attack(self, attackType, target):
+    def dealDamage(self, attackType, baseDamage, target):
         # deal damage to target based on attack type
         if attackType == "light":
-            damageDone = 2 * self.strength
+            damageDone = baseDamage * self.strength
             target.hp -= damageDone
         elif attackType == "medium":
-            damageDone = 4 * self.strength
+            damageDone = baseDamage * self.strength
             target.hp -= damageDone
         elif attackType == "heavy":
-            damageDone = 6 * self.strength
+            damageDone = baseDamage * self.strength
             target.hp -= damageDone
         elif attackType == "fire":
-            damageDone = 5 * self.MStrength
+            damageDone = baseDamage * self.MStrength
             target.hp -= damageDone
         elif attackType == "blizzard":
-            damageDone = 5 * self.MStrength
+            damageDone = baseDamage * self.MStrength
             target.hp -= damageDone
         elif attackType == "thunder":
-            damageDone = 5 * self.MStrength
+            damageDone = baseDamage * self.MStrength
             target.hp -= damageDone
 
         # check if target is still alive
@@ -54,3 +59,18 @@ class Actor():
 
     def applyStatus(self, statusType, target):
         target.statusEffect = statusType
+
+    def updateStatus(self):
+        if self.statusEffectCooldown > 0:
+            self.statusEffectCooldown -= 1
+            self.resistant = True
+            # print("cannot have status effect")
+            # print("resistance status:", self.resistant)
+            # print("resistance cooldown:", self.statusEffectCooldown)
+
+        if self.statusEffectCooldown == 0:
+            self.resistant = False
+            self.statusEffect = None
+            # print("can have status effect")
+            # print("resistance status:", self.resistant)
+            # print("resistance cooldown:", self.statusEffectCooldown)
