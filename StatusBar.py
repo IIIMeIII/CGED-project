@@ -3,11 +3,11 @@ import pygame
 class StatusBar:
     """
     This class creates a rectangle that is used to display 
-    the player and enemy's stats (e.g health and mana). This rectangle
+    the player and enemy's stats (e.g health and magic points). This rectangle
     reflects the current amount of these stats in real time
 
     Attributes:
-        currentAmnt (int): current value of variable being represented
+            currentAmnt (int): current value of variable being represented
             maxAmnt (int): max value of variable being represented
             xPos (int): x position of the status bar
             yPos (int): y position of the status bar

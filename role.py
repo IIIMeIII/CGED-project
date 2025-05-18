@@ -1,6 +1,6 @@
 class Role:
     def __init__(self, roleName, baseHP, baseMP, baseStrength, 
-                 baseMStrength, baseSpeed, physicalAtks, magicAtks):
+                 baseMStrength, baseSpeed, physicalAtks, magicAtks, allPotions):
         self.roleName = roleName
         self.baseHP = baseHP
         self.baseMP = baseMP
@@ -9,3 +9,4 @@ class Role:
         self.baseSpeed = baseSpeed
         self.physicalAtks = physicalAtks
         self.magicAtks = magicAtks
+        self.allPotions = allPotions

@@ -18,7 +18,7 @@ class Actor:
         self.speed = role.baseSpeed
 
         self.potions = 3
-        self.potionHeal = 20
+        self.potionHeal = 30
         
         self.abilityCooldown = 0
         self.statusEffectCooldown = 0
